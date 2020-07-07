@@ -1,16 +1,16 @@
 package com.example.appfornewdevs.view
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.appfornewdevs.R
+import com.example.appfornewdevs.api.Resource
 import com.example.appfornewdevs.databinding.ActivityMainBinding
-import com.example.appfornewdevs.models.RegionModel
 import com.example.appfornewdevs.viewmodels.BaseViewModelFactory
 import com.example.appfornewdevs.viewmodels.MainActivityViewModel
-import io.reactivex.android.schedulers.AndroidSchedulers
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,11 +26,13 @@ class MainActivity : AppCompatActivity() {
             BaseViewModelFactory.viewModelFactory { MainActivityViewModel(this.application) }
         ).get(MainActivityViewModel::class.java)
 
-        //TODO get regions from viewModel and add to view
-
-
+        binding.regionsList.layoutManager = LinearLayoutManager(this)
+        viewModel.loadLanguages().observe(this::getLifecycle) {
+            if (it.status == Resource.Status.SUCCESS) {
+                binding.regionsList.adapter = RegionAdapter(it.data!!)
+            } else {
+                Toast.makeText(this, R.string.error, Toast.LENGTH_SHORT).show()
+            }
+        }
     }
-
-
-
 }

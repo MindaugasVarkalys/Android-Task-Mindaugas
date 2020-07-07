@@ -4,11 +4,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.example.appfornewdevs.BR
 import com.example.appfornewdevs.R
 import com.example.appfornewdevs.databinding.ItemRegionBinding
 import com.example.appfornewdevs.models.RegionModel
 
-class RegionAdapter (private val items: List<RegionModel>) :
+class RegionAdapter (private var items: List<RegionModel>) :
     RecyclerView.Adapter<RegionAdapter.BindingHolder>() {
 
     private val layoutId = R.layout.item_region
@@ -31,7 +32,8 @@ class RegionAdapter (private val items: List<RegionModel>) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(model: RegionModel)  {
-            //TODO add models to view (recommendation to use data binding)
+            binding.setVariable(BR.model, model)
+            binding.executePendingBindings()
         }
     }
 
